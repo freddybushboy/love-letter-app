@@ -1,3 +1,132 @@
-<h1>
-  {{title}}
-</h1>
+<div class="container-fluid  text-center" style="margin-top: 15px;">
+    <div class="row">
+      <div class="col-sm-2">
+        <app-player
+          *ngIf="game.players[0]"
+          [player]="game.players[0]"
+          [activePlayer]="game.activePlayer"
+          [winner]="game.winner"
+          [choosePlayer]="game.choosePlayer"
+          [draw]="game.draw"
+          [playedCard]="game.playedCard"
+          [promptOpen]="game.choosePlayer || game.chooseCard"
+          [playCard]="game.playCard"></app-player>
+
+          <div class="panel">
+            <div class="panel-body">
+              <h5>List of cards</h5>
+              <ul class="card-list">
+                <li><b>8</b> - Princess (1): Lose if discarded</li>
+                <li><b>7</b> - Countess (1): Discard if caught with King or Prince</li>
+                <li><b>6</b> - King (1): Trade hands</li>
+                <li><b>5</b> - Prince (2): One player discards his or her hand</li>
+                <li><b>4</b> - Handmaid (2): Protection until your next turn</li>
+                <li><b>3</b> - Baron (2): Compare hands; lower hand is out</li>
+                <li><b>2</b> - Priest (2): Look at a hand</li>
+                <li><b>1</b> - Guard (5): Guess a player's hand</li>
+              </ul>
+            </div>
+          </div>
+      </div>
+      <div class="col-sm-8">
+
+        <div class="game">
+          <div *ngIf="!game.players.length || game.winner" class="text-center">
+            <div class="logo"><img src="assets/img/logo.jpg" /></div>
+            <h1 class="text-success" *ngIf="game.winner">{{game.winner.name}} is the winner!</h1>
+            <button class="btn btn-primary" style="margin-bottom: 15px;" (click)="newGame();">New game</button>
+          </div>
+          <div *ngIf="game.players.length">
+            <div class="decision" *ngIf="game.choosePlayer || game.chooseCard">
+              <div *ngIf="game.choosePlayer">
+                  <h5>Pick a player:</h5>
+                  <div class="btn-group">
+                      <button class="btn btn-primary" *ngFor="let player of game.playerSelection" (click)="game.choosePlayer(player); game.clearChoosePlayer()">{{player.name}}</button>
+                  </div>
+              </div>
+
+              <div *ngIf="game.chooseCard">
+                  <h5>Guess a card:</h5>
+                  <div class="btn-group">
+                      <button class="btn btn-primary" *ngFor="let card of game.cardList" (click)="game.chooseCard(card.id); game.clearChooseCard()">{{card.name}}</button>
+                  </div>
+              </div>
+            </div>
+
+            <div class="played-card decision" *ngIf="game.playedCard && !game.choosePlayer && !game.chooseCard">
+              <h5>{{game.activePlayer.name}} played {{game.playedCard.name}}
+                <span *ngIf="game.playedCardTarget"> on {{game.playedCardTarget.name}}</span>
+                <span *ngIf="game.playedCard.id === 'baron' && game.playedCardTarget && game.activePlayer.hand[0].value > game.playedCardTarget.hand[0].value"> and won!</span>
+                <span *ngIf="game.playedCard.id === 'baron' && game.playedCardTarget && game.activePlayer.hand[0].value < game.playedCardTarget.hand[0].value"> and lost!</span>
+                <span *ngIf="game.playedCard.id === 'baron' && game.playedCardTarget && game.activePlayer.hand[0].value === game.playedCardTarget.hand[0].value"> but it was a draw!</span>
+                <span *ngIf="game.playedCardCorrectGuess"> and correctly guessed {{game.playedCardCorrectGuess}}</span>
+                <span *ngIf="game.playedCardIncorrectGuess"> and incorrectly guessed {{game.playedCardIncorrectGuess}}</span>
+              </h5>
+              <div style="margin-bottom: 15px;">
+                <div class="card-wrapper">
+                  <app-card [card]="game.playedCard" [reveal]="true"></app-card>
+                </div>
+              </div>
+              <div style="margin-bottom: 15px;" *ngIf="game.playedCardTarget && game.playedCard.id === 'baron'" class="vs">
+                <div class="card-wrapper">
+                  <app-card [card]="game.activePlayer.hand[0]" [reveal]="game.playedCardTarget.human || game.activePlayer.human || game.activePlayer.hand[0].value < game.playedCardTarget.hand[0].value"></app-card>
+                </div>
+                <span>VS</span>
+                <div class="card-wrapper">
+                  <app-card [card]="game.playedCardTarget.hand[0]" [reveal]="game.playedCardTarget.human || game.activePlayer.human || game.activePlayer.hand[0].value > game.playedCardTarget.hand[0].value"></app-card>
+                </div>
+              </div>
+              <div style="margin-bottom: 15px;" *ngIf="game.playedCardTarget && game.playedCard.id === 'priest' && game.activePlayer.human" class="vs">
+                <h5>And saw their card:</h5>
+                <div class="card-wrapper">
+                  <app-card [card]="game.playedCardTarget.hand[0]" [reveal]="true"></app-card>
+                </div>
+              </div>
+              <div style="margin-bottom: 15px;" *ngIf="game.playedCardTarget && game.playedCard.id === 'king'" class="vs">
+                <h5>And swapped cards:</h5>
+                <div class="card-wrapper">
+                  <app-card [card]="game.playedCardTarget.hand[0]" [reveal]="game.activePlayer.human"></app-card>
+                </div>
+                <span>↔</span>
+                <div class="card-wrapper">
+                  <app-card [card]="game.activePlayer.hand[0]" [reveal]="game.activePlayer.human"></app-card>
+                </div>
+              </div>
+              <button class="btn btn-primary" (click)="game.finishTurn()">Okay</button>
+            </div>
+        </div>
+      </div>
+      <div *ngIf="game.players.length">
+        <label>Cards in deck: {{game.deck.length}}</label>
+      </div>
+      <app-player
+        *ngIf="game.players[2]"
+        [player]="game.players[2]"
+        [activePlayer]="game.activePlayer"
+        [winner]="game.winner"
+        [choosePlayer]="game.choosePlayer"
+        [draw]="game.draw"
+        [playedCard]="game.playedCard"
+        [promptOpen]="game.choosePlayer || game.chooseCard"
+        [playCard]="game.playCard"></app-player>
+      </div>
+      <div class="col-sm-2">
+        <app-player
+          *ngIf="game.players[1]"
+          [player]="game.players[1]"
+          [activePlayer]="game.activePlayer"
+          [winner]="game.winner"
+          [choosePlayer]="game.choosePlayer"
+          [draw]="game.draw"
+          [playedCard]="game.playedCard"
+          [promptOpen]="game.choosePlayer || game.chooseCard"
+          [playCard]="game.playCard"></app-player>
+        <div *ngIf="game.players.length">
+        <label>Log</label>
+          <pre class="pre-scrollable">
+<span *ngFor="let log of game.log">{{log}} <br/></span>
+          </pre>
+        </div>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+.card img {
+  display: block;
+}
+.logo {
+  margin-bottom: 20px;
+}
+.card-wrapper {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 120px;
+  width: 100%;
+  margin: 2px;
+  border: 3px solid goldenrod;
+  position: relative;
+}
+.draw-card {
+  height: 163px;
+}
+.card-wrapper .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.vs .card-wrapper {
+  max-width: 60px;
+}
+.robot .card-wrapper {
+  max-width: 80px;
+}
+.discard .card-wrapper {
+  max-width: 60px;
+}
+body pre {
+  height: auto;
+  font-size: 10px;
+  text-align: left;
+  white-space: normal;
+  word-break: normal;
+}
+pre span {
+  margin-bottom: 5px;
+  display: block;
+}
+.game {
+  min-height: 380px;
+  padding-bottom: 20px;
+}
+.game h5 {
+  margin-top: 0;
+}
+.card-list {
+  margin: 0;
+  text-align: left;
+  padding: 0;
+  list-style-type: none;
+}
+.card-list li {
+  font-size: 10px;
+  margin-bottom: 5px;
+}
