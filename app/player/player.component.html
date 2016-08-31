@@ -1,0 +1,24 @@
+<div class="player panel panel-default" [ngClass]="{robot: !player.human, 'panel-primary': player === activePlayer && !player.out && player !== winner, 'panel-danger': player.out, 'panel-success': player === winner}">
+    <div class="panel-heading" [ngClass]="{'text-danger': player.out, 'text-info': player === activePlayer && player !== winner, 'text-success': player === winner}">{{player.name}} <span *ngIf="player.out">(OUT)</span><span *ngIf="player.protected">(PROTECTED)</span></div>
+
+    <div class="panel-body">
+
+        <div *ngFor="let card of player.hand" class="card-wrapper">
+            <app-card [card]="card" [reveal]="player.human || winner || player.out"></app-card>
+            <button class="btn btn-primary" (click)="playCard(card)" *ngIf="player === activePlayer && player.hand.length > 1 && player.human" [disabled]="(card.id === 'prince' || card.id === 'king') && (player.hand[0].id === 'countess' || player.hand[1].id === 'countess')">Play</button>
+        </div>
+        <div class="card-wrapper draw-card" *ngIf="!promptOpen && !winner && player === activePlayer && player.hand.length === 1 && player.human && !playedCard">
+            <button class="btn btn-primary" (click)="draw(player)">Draw</button>
+        </div>
+
+
+        <div *ngIf="player.playedCards.length">
+            <label>Played cards:</label>
+            <div class="discard">
+                <div class="card-wrapper" *ngFor="let card of player.playedCards">
+                    <app-card [reveal]="true" [card]="card"></app-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
