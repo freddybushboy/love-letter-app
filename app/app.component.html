@@ -12,7 +12,7 @@
           [promptOpen]="game.choosePlayer || game.chooseCard"
           [playCard]="game.playCard"></app-player>
 
-          <div class="panel">
+          <div class="panel" *ngIf="game.players.length">
             <div class="panel-body">
               <h5>List of cards</h5>
               <ul class="card-list">
@@ -34,6 +34,7 @@
           <div *ngIf="!game.players.length || game.winner" class="text-center">
             <div class="logo"><img src="assets/img/logo.jpg" /></div>
             <h1 class="text-success" *ngIf="game.winner">{{game.winner.name}} is the winner!</h1>
+            <p>Love Letter is a game of risk, deduction, and luck for 2–4 players (in this case 3). Your goal is to get your love letter into Princess Annette's hands while deflecting the letters from competing suitors. From a deck with only sixteen cards, each player starts with only one card in hand; one card is removed from play. <a href="https://www.alderac.com/tempest/files/2012/09/Love_Letter_Rules_Final.pdf" target="_blank">Read the rules</a>.</p>
             <button class="btn btn-primary" style="margin-bottom: 15px;" (click)="newGame();">New game</button>
           </div>
           <div *ngIf="game.players.length">
