@@ -7,7 +7,11 @@ img {
   display: block;
 }
 .logo {
-  margin-bottom: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.logo img {
+  width: 300px;
 }
 .card-wrapper {
   display: inline-block;

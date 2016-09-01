@@ -1,5 +1,9 @@
 # LoveLetterGame
 
+Love Letter is a game of risk, deduction, and luck for 2–4 players (in this case 3). Your goal is to get your love letter into Princess Annette's hands while deflecting the letters from competing suitors. From a deck with only sixteen cards, each player starts with only one card in hand; one card is removed from play.
+
+[Read the rules](https://www.alderac.com/tempest/files/2012/09/Love_Letter_Rules_Final.pdf).
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.10.
 
 ## Development server
